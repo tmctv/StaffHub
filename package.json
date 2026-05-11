@@ -1,0 +1,64 @@
+{
+  "name": "tmc-clockin",
+  "version": "1.1.0",
+  "description": "TMC Staff Clock-In System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "build:msi": "electron-builder --win nsis"
+  },
+  "author": "The Mishra Corporation",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.0",
+    "sharp": "^0.34.5"
+  },
+  "build": {
+    "appId": "co.tmc.clockin",
+    "productName": "TMC StaffHub",
+    "copyright": "Copyright © 2026 The Mishra Corporation",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "msi": {
+      "oneClick": false,
+      "perMachine": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "installerSidebar": "build/installerSidebar.png",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "TMC StaffHub",
+      "license": "build/license.txt",
+      "include": "build/installer.nsh",
+      "displayLanguageSelector": false
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "assets/**/*"
+    ]
+  }
+}
