@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TMC StaffHub — Presenter</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',system-ui,sans-serif;background:#0a0a14;color:#fff;height:100vh;overflow:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+
+  .presenter{display:flex;flex-direction:column;height:100vh;padding:40px 60px}
+
+  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px}
+  .top-left{display:flex;align-items:center;gap:16px}
+  .top-logo{height:36px;width:auto}
+  .top-title{font-size:16px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase}
+  .top-clock{font-size:64px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-2px;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .top-date{font-size:16px;color:rgba(255,255,255,0.3);text-align:right;margin-top:4px}
+
+  .status-summary{display:flex;gap:24px;margin-bottom:40px}
+  .summary-card{flex:1;padding:24px 28px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)}
+  .summary-card.in{background:linear-gradient(135deg,rgba(0,200,83,0.08),transparent);border-color:rgba(0,200,83,0.15)}
+  .summary-card.out{background:linear-gradient(135deg,rgba(255,82,82,0.06),transparent);border-color:rgba(255,82,82,0.1)}
+  .summary-card.total{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06)}
+  .summary-value{font-size:48px;font-weight:900}
+  .summary-card.in .summary-value{color:#00E676}
+  .summary-card.out .summary-value{color:#FF5252}
+  .summary-card.total .summary-value{color:rgba(255,255,255,0.6)}
+  .summary-label{font-size:13px;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+  .staff-section{flex:1;overflow:hidden}
+  .staff-section h2{font-size:14px;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:20px}
+  .staff-mega-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+
+  .mega-card{padding:24px;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden;transition:all 0.3s}
+  .mega-card.clocked-in{background:rgba(0,230,118,0.05);border-color:rgba(0,230,118,0.12)}
+  .mega-card.clocked-in::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00E676,transparent)}
+  .mega-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+  .mega-avatar{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff}
+  .mega-name{font-size:18px;font-weight:700}
+  .mega-role{font-size:12px;color:rgba(255,255,255,0.3);margin-top:2px}
+  .mega-status{display:flex;align-items:center;gap:8px}
+  .mega-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15)}
+  .mega-dot.active{background:#00E676;box-shadow:0 0 12px rgba(0,230,118,0.4);animation:glow 2s ease-in-out infinite}
+  @keyframes glow{0%,100%{box-shadow:0 0 12px rgba(0,230,118,0.4)}50%{box-shadow:0 0 20px rgba(0,230,118,0.2)}}
+  .mega-status-text{font-size:14px;font-weight:600;color:rgba(255,255,255,0.3)}
+  .mega-status-text.active{color:#00E676}
+
+  .announcement-banner{position:fixed;bottom:0;left:0;right:0;padding:20px 60px;background:linear-gradient(135deg,rgba(124,77,255,0.15),rgba(255,72,188,0.1));border-top:1px solid rgba(124,77,255,0.2);display:none;animation:slideUp 0.5s ease}
+  .announcement-banner.show{display:flex;align-items:center;gap:16px}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .ann-badge{padding:4px 12px;background:rgba(124,77,255,0.2);border-radius:6px;font-size:11px;font-weight:700;color:#a07aff;text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+  .ann-text{font-size:15px;font-weight:500;color:rgba(255,255,255,0.8)}
+
+  /* Emergency overlay */
+  .emergency-overlay{position:fixed;inset:0;background:#1a0000;z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .emergency-overlay.active{display:flex;animation:emgFlash 1s ease infinite}
+  @keyframes emgFlash{0%,100%{background:#1a0000}50%{background:#330000}}
+  .emg-icon{color:#FF5252;margin-bottom:24px;animation:emgPulse 0.5s ease infinite alternate}
+  @keyframes emgPulse{from{transform:scale(1);opacity:1}to{transform:scale(1.1);opacity:0.7}}
+  .emg-title{font-size:56px;font-weight:900;color:#FF5252;letter-spacing:4px;margin-bottom:16px}
+  .emg-message{font-size:28px;color:rgba(255,255,255,0.8);max-width:700px;line-height:1.4}
+</style>
+</head>
+<body>
+
+<div class="presenter">
+  <div class="top-bar">
+    <div class="top-left">
+      <img src="https://i.postimg.cc/bv1y0KCx/TMC-logo.png" alt="TMC" class="top-logo">
+      <span class="top-title">StaffHub Presenter</span>
+    </div>
+    <div>
+      <div class="top-clock" id="p-clock">00:00:00</div>
+      <div class="top-date" id="p-date">—</div>
+    </div>
+  </div>
+
+  <div class="status-summary">
+    <div class="summary-card in"><div class="summary-value" id="p-in">0</div><div class="summary-label">Clocked In</div></div>
+    <div class="summary-card out"><div class="summary-value" id="p-out">0</div><div class="summary-label">Clocked Out</div></div>
+    <div class="summary-card total"><div class="summary-value" id="p-total">0</div><div class="summary-label">Total Staff</div></div>
+  </div>
+
+  <div class="staff-section">
+    <h2>Staff Status</h2>
+    <div class="staff-mega-grid" id="p-grid"></div>
+  </div>
+</div>
+
+<div class="announcement-banner" id="p-announcement">
+  <span class="ann-badge">Announcement</span>
+  <span class="ann-text" id="p-ann-text">—</span>
+</div>
+
+<div class="emergency-overlay" id="p-emergency">
+  <svg class="emg-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  <h1 class="emg-title">EMERGENCY ALERT</h1>
+  <p class="emg-message" id="p-emg-msg">—</p>
+</div>
+
+<audio id="p-alarm" preload="auto" loop>
+  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAgICAgICAgICAgIB/f3+BgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/v/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf39/gICAgICAgICAgIA=" type="audio/wav">
+</audio>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('p-clock').textContent = now.toLocaleTimeString('en-US', { hour12: false });
+    document.getElementById('p-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  async function refresh() {
+    const staff = await window.api.getStaff();
+    const statuses = await window.api.getAllStatuses();
+    let inCount = 0;
+    const grid = document.getElementById('p-grid');
+    grid.innerHTML = staff.map(m => {
+      const s = statuses[m.id];
+      const isIn = s && s.action === 'in';
+      if (isIn) inCount++;
+      return `
+        <div class="mega-card ${isIn ? 'clocked-in' : ''}">
+          <div class="mega-top">
+            <div class="mega-avatar" style="background:${m.color}">${m.avatar}</div>
+            <div><div class="mega-name">${m.name}</div><div class="mega-role">${m.role}</div></div>
+          </div>
+          <div class="mega-status">
+            <div class="mega-dot ${isIn ? 'active' : ''}"></div>
+            <span class="mega-status-text ${isIn ? 'active' : ''}">${isIn ? 'Clocked In' : 'Off Shift'}</span>
+          </div>
+        </div>`;
+    }).join('');
+    document.getElementById('p-in').textContent = inCount;
+    document.getElementById('p-out').textContent = staff.length - inCount;
+    document.getElementById('p-total').textContent = staff.length;
+  }
+
+  refresh();
+  setInterval(refresh, 5000);
+  window.api.onDataUpdated(() => refresh());
+
+  window.api.onAnnouncement((data) => {
+    const banner = document.getElementById('p-announcement');
+    document.getElementById('p-ann-text').textContent = data.title + ' — ' + data.message;
+    banner.classList.add('show');
+    setTimeout(() => banner.classList.remove('show'), 15000);
+  });
+
+  window.api.onEmergency((data) => {
+    document.getElementById('p-emg-msg').textContent = data.message;
+    document.getElementById('p-emergency').classList.add('active');
+    document.getElementById('p-alarm').play().catch(() => {});
+  });
+
+  window.api.onEmergencyClear(() => {
+    document.getElementById('p-emergency').classList.remove('active');
+    document.getElementById('p-alarm').pause();
+    document.getElementById('p-alarm').currentTime = 0;
+  });
+
+  // Check for existing emergency on load
+  window.api.getEmergency().then(emg => {
+    if (emg && emg.active) {
+      document.getElementById('p-emg-msg').textContent = emg.message;
+      document.getElementById('p-emergency').classList.add('active');
+      document.getElementById('p-alarm').play().catch(() => {});
+    }
+  });
+</script>
+</body>
+</html>

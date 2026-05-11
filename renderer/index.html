@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMC StaffHub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Title Bar -->
+  <div class="titlebar">
+    <div class="titlebar-left">
+      <img src="https://i.postimg.cc/bv1y0KCx/TMC-logo.png" alt="TMC" class="tb-icon">
+      <span class="tb-title">StaffHub Portal</span>
+      <span class="tb-version">v1.0</span>
+    </div>
+    <div class="titlebar-controls">
+      <button class="tb-btn" id="btn-min" title="Minimize">
+        <svg width="10" height="1" viewBox="0 0 10 1"><rect width="10" height="1" fill="currentColor"/></svg>
+      </button>
+      <button class="tb-btn" id="btn-max" title="Maximize">
+        <svg width="10" height="10" viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" stroke="currentColor" fill="none" stroke-width="1"/></svg>
+      </button>
+      <button class="tb-btn tb-close" id="btn-close" title="Close">
+        <svg width="10" height="10" viewBox="0 0 10 10"><line x1="0" y1="0" x2="10" y2="10" stroke="currentColor" stroke-width="1.2"/><line x1="10" y1="0" x2="0" y2="10" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Update Banner -->
+  <div class="update-banner" id="update-banner">
+    <div class="update-info">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span><strong>Update available!</strong> StaffHub <span id="update-version">v0.0</span> is ready — <a href="#" id="update-link" target="_blank">Download now</a></span>
+    </div>
+    <button class="update-dismiss" id="update-dismiss">&times;</button>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <button class="nav-item active" data-view="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="activity">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>Activity</span>
+        </button>
+        <button class="nav-item" data-view="announcements">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Announcements</span>
+        </button>
+        <button class="nav-item" data-view="radio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+          <span>Radio</span>
+        </button>
+      </div>
+      <div class="sidebar-section" style="margin-top:16px">
+        <div class="nav-divider-label">TOOLS</div>
+        <button class="nav-item" data-view="presenter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Presenter</span>
+        </button>
+        <button class="nav-item nav-emergency" data-view="emergency">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>Emergency</span>
+        </button>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-branding">
+          <span class="brand-tmc">TMC</span>
+          <span class="brand-sub">StaffHub</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- Dashboard View -->
+      <div class="view active" id="view-dashboard">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Dashboard</h1>
+            <p class="view-subtitle" id="dash-date">—</p>
+          </div>
+          <div class="header-clock" id="header-clock">00:00:00</div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-value" id="stat-total">0</div><div class="stat-label">Total Staff</div></div>
+          <div class="stat-card stat-active"><div class="stat-value" id="stat-clocked">0</div><div class="stat-label">Clocked In</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-out">0</div><div class="stat-label">Clocked Out</div></div>
+        </div>
+        <div class="section-header"><h2>Staff</h2><button class="btn-add-staff" id="btn-add-staff">+ Add Member</button></div>
+        <div class="staff-grid" id="staff-grid"></div>
+      </div>
+
+      <!-- Activity View -->
+      <div class="view" id="view-activity">
+        <div class="view-header"><div><h1 class="view-title">Activity Log</h1><p class="view-subtitle">Recent clock-in/out records</p></div></div>
+        <div class="activity-feed" id="activity-feed"></div>
+      </div>
+
+      <!-- Announcements View -->
+      <div class="view" id="view-announcements">
+        <div class="view-header">
+          <div><h1 class="view-title">Announcements</h1><p class="view-subtitle">Post updates visible to all staff</p></div>
+          <button class="btn-add-staff" id="btn-new-announcement">+ New Announcement</button>
+        </div>
+        <div class="announcements-list" id="announcements-list"></div>
+      </div>
+
+      <!-- Radio View -->
+      <div class="view" id="view-radio">
+        <div class="view-header"><div><h1 class="view-title">Cirya Radio</h1><p class="view-subtitle">Live stream — store speakers</p></div></div>
+        <div class="radio-player">
+          <div class="radio-art-wrap">
+            <div class="radio-art" id="radio-art">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/></svg>
+            </div>
+            <div class="radio-visualizer" id="radio-viz">
+              <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+              <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+              <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+            </div>
+          </div>
+          <div class="radio-info">
+            <div class="radio-station" id="radio-station">Cirya Radio</div>
+            <div class="radio-now-playing">
+              <span class="now-playing-label">NOW PLAYING</span>
+              <div class="radio-title" id="radio-title">—</div>
+              <div class="radio-artist" id="radio-artist">—</div>
+              <div class="radio-album" id="radio-album"></div>
+            </div>
+            <div class="radio-progress">
+              <div class="progress-bar"><div class="progress-fill" id="radio-progress-fill"></div></div>
+              <div class="progress-times"><span id="radio-elapsed">0:00</span><span id="radio-duration">0:00</span></div>
+            </div>
+            <div class="radio-controls">
+              <button class="radio-play-btn" id="btn-radio-play">
+                <svg class="icon-play" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="volume-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70">
+              </div>
+              <div class="radio-listeners"><span class="listeners-dot"></span><span id="radio-listeners">0</span> listening</div>
+            </div>
+          </div>
+        </div>
+        <div class="radio-meta-cards">
+          <div class="meta-card"><div class="meta-label">Station</div><div class="meta-value" id="meta-station">Cirya Radio</div></div>
+          <div class="meta-card"><div class="meta-label">Stream</div><div class="meta-value meta-url">cast.cirya.co</div></div>
+          <div class="meta-card"><div class="meta-label">Format</div><div class="meta-value">MP3 128kbps</div></div>
+          <div class="meta-card"><div class="meta-label">Platform</div><div class="meta-value">CiryaCast</div></div>
+        </div>
+      </div>
+
+      <!-- Presenter View -->
+      <div class="view" id="view-presenter">
+        <div class="view-header"><div><h1 class="view-title">Presenter Mode</h1><p class="view-subtitle">Staff room TV display — select a monitor</p></div></div>
+        <div class="presenter-setup">
+          <div class="presenter-preview">
+            <div class="preview-mock">
+              <div class="mock-bar"></div>
+              <div class="mock-grid">
+                <div class="mock-card"></div><div class="mock-card active"></div>
+                <div class="mock-card active"></div><div class="mock-card"></div>
+              </div>
+              <div class="mock-label">TMC StaffHub — Presenter</div>
+            </div>
+          </div>
+          <div class="presenter-controls">
+            <h3>Select Display</h3>
+            <p class="presenter-hint">Choose which monitor to show the presenter view on. It will open fullscreen.</p>
+            <div class="display-list" id="display-list"></div>
+            <button class="btn-launch-presenter" id="btn-launch-presenter">Launch Presenter</button>
+            <button class="btn-stop-presenter" id="btn-stop-presenter" style="display:none">Stop Presenter</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency View -->
+      <div class="view" id="view-emergency">
+        <div class="view-header"><div><h1 class="view-title">Emergency Alerts</h1><p class="view-subtitle">Trigger alarms across all screens</p></div></div>
+        <div class="emergency-panel">
+          <div class="emergency-status" id="emergency-status">
+            <div class="emg-icon-ok">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>No Active Emergency</h3>
+            <p>All clear. Use the form below to trigger an emergency alert.</p>
+          </div>
+          <div class="emergency-form">
+            <div class="input-group">
+              <label>Alert Message</label>
+              <input type="text" id="emergency-msg" placeholder="e.g. Fire alarm — evacuate immediately" spellcheck="false">
+            </div>
+            <div class="emergency-presets">
+              <button class="preset-btn" onclick="document.getElementById('emergency-msg').value='FIRE ALARM — Evacuate the building immediately'">Fire</button>
+              <button class="preset-btn" onclick="document.getElementById('emergency-msg').value='SECURITY ALERT — Lock all doors and stay inside'">Security</button>
+              <button class="preset-btn" onclick="document.getElementById('emergency-msg').value='MEDICAL EMERGENCY — First aid needed immediately'">Medical</button>
+              <button class="preset-btn" onclick="document.getElementById('emergency-msg').value='SEVERE WEATHER — Seek shelter immediately'">Weather</button>
+            </div>
+            <button class="btn-trigger-emergency" id="btn-trigger-emergency">Trigger Emergency Alert</button>
+            <button class="btn-clear-emergency" id="btn-clear-emergency" style="display:none">Clear Emergency</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mini Radio Player -->
+  <div class="mini-player" id="mini-player">
+    <div class="mini-info">
+      <div class="mini-viz" id="mini-viz"><div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div></div>
+      <div class="mini-text"><span class="mini-title" id="mini-title">Cirya Radio</span><span class="mini-artist" id="mini-artist">—</span></div>
+    </div>
+    <button class="mini-play-btn" id="btn-mini-play">
+      <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Emergency Overlay -->
+  <div class="emergency-overlay" id="emergency-overlay">
+    <div class="emg-content">
+      <div class="emg-flash"></div>
+      <svg class="emg-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <h1 class="emg-title">EMERGENCY ALERT</h1>
+      <p class="emg-message" id="emg-overlay-msg">—</p>
+    </div>
+  </div>
+
+  <!-- Add Staff Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h3 class="modal-title">Add Staff Member</h3>
+      <div class="input-group"><label>Employee ID</label><input type="text" id="new-id" placeholder="e.g. TMC-0005" spellcheck="false"></div>
+      <div class="input-group"><label>Full Name</label><input type="text" id="new-name" placeholder="Full name" spellcheck="false"></div>
+      <div class="input-group"><label>Role</label><input type="text" id="new-role" placeholder="e.g. Staff, Manager" spellcheck="false"></div>
+      <div class="modal-actions"><button class="btn-cancel" id="btn-modal-cancel">Cancel</button><button class="btn-confirm" id="btn-modal-confirm">Add Member</button></div>
+    </div>
+  </div>
+
+  <!-- Announcement Modal -->
+  <div class="modal-overlay" id="modal-announcement">
+    <div class="modal">
+      <h3 class="modal-title">New Announcement</h3>
+      <div class="input-group"><label>Title</label><input type="text" id="ann-title" placeholder="Announcement title" spellcheck="false"></div>
+      <div class="input-group"><label>Message</label><textarea id="ann-message" placeholder="Write your announcement..." rows="4" spellcheck="false" style="width:100%;padding:11px 16px;background:#f0f0f5;border:1px solid rgba(0,0,0,0.1);border-radius:10px;color:#1a1a2e;font-size:13px;font-family:inherit;outline:none;resize:vertical"></textarea></div>
+      <div class="input-group">
+        <label>Priority</label>
+        <select id="ann-priority" style="width:100%;padding:11px 16px;background:#f0f0f5;border:1px solid rgba(0,0,0,0.1);border-radius:10px;color:#1a1a2e;font-size:13px;font-family:inherit;outline:none">
+          <option value="normal">Normal</option>
+          <option value="important">Important</option>
+          <option value="urgent">Urgent</option>
+        </select>
+      </div>
+      <div class="modal-actions"><button class="btn-cancel" id="btn-ann-cancel">Cancel</button><button class="btn-confirm" id="btn-ann-confirm">Post Announcement</button></div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <audio id="radio-audio" preload="none"><source src="https://cast.cirya.co/listen/one/radio.mp3" type="audio/mpeg"></audio>
+  <audio id="alarm-audio" preload="auto" loop><source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAgICAgICAgICAgIB/f3+BgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/v/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf39/gICAgICAgICAgIA=" type="audio/wav"></audio>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TMC StaffHub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: transparent;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-app-region: drag;
+  }
+
+  .splash {
+    width: 520px;
+    height: 380px;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f7ff 50%, #f0eeff 100%);
+    border-radius: 24px;
+    border: 1px solid rgba(124,77,255,0.08);
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.02),
+      0 8px 24px rgba(0,0,0,0.06),
+      0 24px 60px rgba(124,77,255,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    animation: splashIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes splashIn {
+    from { opacity: 0; transform: scale(0.92) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .splash::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(124,77,255,0.03), transparent, rgba(255,72,188,0.03), transparent);
+    animation: shimmer 8s linear infinite;
+  }
+
+  @keyframes shimmer { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .splash-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .splash-logo {
+    height: 72px;
+    width: auto;
+    margin-bottom: 20px;
+    animation: logoIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    filter: drop-shadow(0 4px 12px rgba(124,77,255,0.12));
+  }
+
+  @keyframes logoIn {
+    from { opacity: 0; transform: scale(0.8) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .splash-title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+    animation: textIn 0.6s ease 0.4s both;
+  }
+
+  .splash-title span {
+    background: linear-gradient(135deg, #7C4DFF, #FF48BC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .splash-subtitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: #999;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: textIn 0.6s ease 0.5s both;
+  }
+
+  @keyframes textIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .splash-loader {
+    margin-top: 36px;
+    width: 200px;
+    animation: textIn 0.6s ease 0.7s both;
+  }
+
+  .loader-track {
+    height: 3px;
+    background: rgba(124,77,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .loader-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #7C4DFF, #FF48BC, #0ED7FF);
+    background-size: 200% 100%;
+    animation: loadFill 3s cubic-bezier(0.4, 0, 0.2, 1) 0.9s both, loadShimmer 1.5s ease infinite;
+  }
+
+  @keyframes loadFill {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+
+  @keyframes loadShimmer {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+
+  .splash-status {
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #bbb;
+    animation: textIn 0.5s ease 1s both;
+  }
+
+  .splash-version {
+    position: absolute;
+    bottom: 20px;
+    font-size: 10px;
+    color: #ccc;
+    font-weight: 500;
+    animation: textIn 0.5s ease 0.8s both;
+    z-index: 2;
+  }
+
+  .splash-corp {
+    position: absolute;
+    bottom: 34px;
+    font-size: 11px;
+    color: #aaa;
+    font-weight: 500;
+    animation: textIn 0.5s ease 0.75s both;
+    z-index: 2;
+  }
+
+  .dots {
+    display: inline-block;
+  }
+  .dots span {
+    animation: dotBlink 1.4s infinite;
+    opacity: 0;
+  }
+  .dots span:nth-child(1) { animation-delay: 0s; }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotBlink {
+    0%, 20% { opacity: 0; }
+    40%, 100% { opacity: 1; }
+  }
+
+  .fade-out {
+    animation: fadeOut 0.4s ease forwards;
+  }
+  @keyframes fadeOut {
+    to { opacity: 0; transform: scale(0.96); }
+  }
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <div class="splash-content">
+    <img src="https://i.postimg.cc/bv1y0KCx/TMC-logo.png" class="splash-logo" alt="TMC">
+    <div class="splash-title"><span>Staff</span>Hub Portal</div>
+    <div class="splash-subtitle">The Mishra Corporation</div>
+    <div class="splash-loader">
+      <div class="loader-track"><div class="loader-fill"></div></div>
+    </div>
+    <div class="splash-status" id="status-text">Initializing<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+  </div>
+  <div class="splash-corp">The Mishra Corporation</div>
+  <div class="splash-version">v1.1.0 — Internal Use Only</div>
+</div>
+
+<script>
+  const msgs = [
+    { text: 'Loading modules', delay: 800 },
+    { text: 'Connecting to servers', delay: 1600 },
+    { text: 'Syncing staff data', delay: 2400 },
+    { text: 'Preparing workspace', delay: 3200 },
+    { text: 'Ready', delay: 3700 }
+  ];
+
+  const statusEl = document.getElementById('status-text');
+  const dots = '<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
+
+  msgs.forEach(m => {
+    setTimeout(() => {
+      statusEl.innerHTML = m.text + (m.text === 'Ready' ? '' : dots);
+    }, m.delay);
+  });
+
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('fade-out');
+  }, 3900);
+</script>
+
+</body>
+</html>
